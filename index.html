@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Titanic</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Titanic">
+  <meta name="author" content="EffZeh">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+<link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Titanic</h1>
+    <h2>Prediction of Survival</h2>
+    <p>EffZeh<br/>Coursera Data Science - 09 Developing Data Products</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Content &amp; Agenda</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This is the corresponding documentation for the shiny app:
+<a href="https://effzeh.shinyapps.io/Course_Project/">https://effzeh.shinyapps.io/Course_Project/</a></p>
+
+<p>The app &quot;Titanic - Prediction of Survival&quot; predicts the likeliyhood of survival based on gender (femal or male), age (child or adult) and ticket purchased for the Titanic (1st class, 2nd, 3rd or crew).</p>
+
+<p>The next slides outline</p>
+
+<ul>
+<li>the underlying data</li>
+<li>the prediction model</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Underlying Data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The data used for the prediction has been pulled from the R library &#39;datasets&#39;</p>
+
+<pre><code class="r">library(&#39;datasets&#39;)
+summary(Titanic)
+</code></pre>
+
+<pre><code>## Number of cases in table: 2201 
+## Number of factors: 4 
+## Test for independence of all factors:
+##  Chisq = 1637.4, df = 25, p-value = 0
+##  Chi-squared approximation may be incorrect
+</code></pre>
+
+<pre><code class="r">head(as.data.frame(Titanic),3)
+</code></pre>
+
+<pre><code>##   Class  Sex   Age Survived Freq
+## 1   1st Male Child       No    0
+## 2   2nd Male Child       No    0
+## 3   3rd Male Child       No   35
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Prediction Model (1)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The variables gender (&#39;sex&#39;), &#39;age&#39; and &#39;class&#39; (input) has been used to predict the variable &#39;survived&#39; (outcome).</p>
+
+<p>First a data frame containing a row for each of the 2201 passenger has been created. 
+Then the input variables have been converted to n-dimensional vectors:</p>
+
+<ul>
+<li>gender -&gt; 2-dimensional vector, e.g.: male = (1,0), female = (0,1)</li>
+<li>age -&gt; 2-dimensional vector</li>
+<li>class -&gt; 4-dimensional vector</li>
+</ul>
+
+<pre><code class="r"># Example:
+x &lt;- data.frame(0,1,0,1,0,0,0,1,1)
+names(x) &lt;- c(&quot;gender_male&quot;, &quot;gender_female&quot;,&quot;age_child&quot;, &quot;age_adult&quot;
+              , &quot;class_1st&quot;, &quot;class_2nd&quot;, &quot;class_3rd&quot;, &quot;class_crew&quot;,&quot;survived&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Prediction Model (2)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Based on the transformed data a training, cross validation and testing dataset have been calculated randomly.</p>
+
+<p>The training data has been used to initally train a neural net. The cross validation dataset has then been used to enhance the settings of the neural net.</p>
+
+<p>The trained neural net work achived a accuracy of ~ 82 % for the testing dataset. This trained neural net is used by the shiny app to predict the survival on the Titanic.</p>
+
+<pre><code class="r">## packages used for neural net:
+# install.packages(&#39;neuralnet&#39;)
+# library(&quot;neuralnet&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Content &amp; Agenda'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Underlying Data'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Prediction Model (1)'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Prediction Model (2)'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+<script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
+<script src="libraries/widgets/quiz/js/mustache.min.js"></script>
+<script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+
+  <script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
